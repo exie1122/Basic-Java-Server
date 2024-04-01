@@ -1,42 +1,33 @@
 import java.net.*;
 import java.io.*;
+import java.util.Scanner;
 
 public class Server {
-    // the port #, change it to what port you want to use
     private static int port = 4999;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        ServerSocket serverSocket = new ServerSocket(port);
+        System.out.println("Server has been started on port: " + port);
 
-        // variables are left as null to use across a number of blocks of code
-        ServerSocket serverSocket = null;
-        Socket clientSocket = null;
-        PrintWriter out = null;
-        BufferedReader in = null;
+        Socket clientSocket = serverSocket.accept();
+        System.out.println("Client connected");
 
-        try {
-            serverSocket = new ServerSocket(port); // Making the ServerSocket
-            System.out.println("Server has been started on port:" + " " + port);
+        PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+        BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-            clientSocket = serverSocket.accept(); // Will create a new socket if ServerSocket accepts a request
-            System.out.println("client connected");
+        Scanner scanner = new Scanner(System.in);
 
-            // Stream to send data
-            out = new PrintWriter(clientSocket.getOutputStream(), true);
-            // stream to receive data
-            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        while (true) {
+            System.out.println("Enter message to send to client:");
+            String messageToSend = scanner.nextLine();
 
-            
-            String inputLine;
+            out.println(messageToSend);  // Send the message to the client
 
-            // Keep reading lines from the client
-            while ((inputLine = in.readLine()) != null) {
-                System.out.println("Client: " + inputLine);
-                out.println("Echo: " + inputLine); // Send a response back to the client
+            String clientResponse = in.readLine();
+            if (clientResponse == null) {
+                break;  // Exit loop if the client disconnects
             }
-        } catch (IOException e) {
-            System.out.println("Exception when trying to listen on port " + port + " or listening for a connection");
-            e.printStackTrace();
-        }
+            System.out.println("Client says: " + clientResponse);
         }
     }
-
+}
