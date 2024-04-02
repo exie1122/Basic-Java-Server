@@ -1,6 +1,3 @@
-// client script 😃   
-
-// libraries i used:
 import java.net.*;
 import java.io.*;
 import java.util.Scanner;
