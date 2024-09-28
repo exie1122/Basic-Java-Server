@@ -1,4 +1,4 @@
-# Basic Server for File Uploading
+# Basic Server
 
 just a little side project I'm gonna be doing while I'm learning Java.
 
